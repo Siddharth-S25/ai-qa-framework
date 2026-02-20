@@ -1,0 +1,62 @@
+name: AI QA Framework - CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      user_story:
+        description: 'User story to generate tests from'
+        required: false
+        default: ''
+
+jobs:
+  ai-qa-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate tests from user story (if provided)
+        if: ${{ github.event.inputs.user_story != '' }}
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: node generate.js full --story "${{ github.event.inputs.user_story }}"
+
+      - name: Run Playwright tests
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: npm test
+        continue-on-error: true
+
+      - name: AI Failure Analysis
+        if: always()
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: node generate.js analyze
+
+      - name: Upload HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: reports/html/
+          retention-days: 30

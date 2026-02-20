@@ -1,0 +1,22 @@
+{
+  "name": "ai-qa-framework",
+  "version": "1.0.0",
+  "description": "AI-powered QA automation framework",
+  "main": "generate.js",
+  "scripts": {
+    "generate": "node generate.js",
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "report": "npx playwright show-report reports/html"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0",
+    "dotenv": "^16.0.0",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}

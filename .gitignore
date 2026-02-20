@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Environment - NEVER push this
+.env
+
+# Test outputs
+test-results/
+reports/
+
+# IntelliJ IDE files - personal settings, not needed
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db

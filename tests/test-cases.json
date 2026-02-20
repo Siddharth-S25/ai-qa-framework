@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Login with standard_user",
+    "preconditions": [
+      "SauceDemo login page accessible",
+      "Valid creds: standard_user/secret_sauce"
+    ],
+    "steps": [
+      "Open login page",
+      "Enter username standard_user",
+      "Enter password secret_sauce",
+      "Click Login"
+    ],
+    "expectedResult": "User lands on Inventory page",
+    "priority": "High"
+  },
+  {
+    "title": "Login with problem_user",
+    "preconditions": [
+      "SauceDemo login page accessible",
+      "Valid creds: problem_user/secret_sauce"
+    ],
+    "steps": [
+      "Open login page",
+      "Enter username problem_user",
+      "Enter password secret_sauce",
+      "Click Login"
+    ],
+    "expectedResult": "User lands on Inventory page",
+    "priority": "High"
+  },
+  {
+    "title": "Login with performance_glitch_user",
+    "preconditions": [
+      "SauceDemo login page accessible",
+      "Valid creds: performance_glitch_user/secret_sauce"
+    ],
+    "steps": [
+      "Open login page",
+      "Enter username performance_glitch_user",
+      "Enter password secret_sauce",
+      "Click Login"
+    ],
+    "expectedResult": "User lands on Inventory page",
+    "priority": "High"
+  }
+]
