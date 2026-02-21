@@ -274,4 +274,4 @@ Tested against **[Saucedemo](https://www.saucedemo.com)** — a free practice au
 
 ## 📄 License
 
-MIT — free to use and showcase in interviews and your portfolio.
+MIT — free to use.
