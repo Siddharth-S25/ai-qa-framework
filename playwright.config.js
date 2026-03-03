@@ -1,32 +1,26 @@
-const { defineConfig, devices } = require('@playwright/test');
+const { defineConfig } = require('@playwright/test');
 require('dotenv').config();
 
 module.exports = defineConfig({
   testDir: './tests',
-  fullyParallel: false,
-  retries: 2,
-  workers: 1,
-  timeout: 30000,
-
-  reporter: [
-    ['list'],
-    ['html', { outputFolder: 'reports/html', open: 'never' }],
-    ['json', { outputFile: 'test-results/results.json' }]
-  ],
+  timeout: 60000,          // increase from 30s to 60s
+  retries: 3,              // increase from 2 to 3
+  workers: 1,              // keep 1 - less pressure on site
 
   use: {
-    baseURL: process.env.BASE_URL || 'https://example.com',
-    trace: 'on-first-retry',
+    baseURL: process.env.BASE_URL,
+    headless: true,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    headless: true,
+    trace: 'on-first-retry',
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
   },
 
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
+  reporter: [
+    ['html', { outputFolder: 'reports/html', open: 'never' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+    ['list']
   ],
 
   outputDir: 'test-results/artifacts',

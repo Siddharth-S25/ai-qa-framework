@@ -1,47 +1,87 @@
 [
   {
-    "title": "Login with standard_user",
+    "title": "Add items to cart and checkout - positive flow",
     "preconditions": [
-      "SauceDemo login page accessible",
-      "Valid creds: standard_user/secret_sauce"
+      "SauceDemo site is accessible",
+      "Valid user credentials available (e.g., standard_user)"
     ],
     "steps": [
-      "Open login page",
-      "Enter username standard_user",
-      "Enter password secret_sauce",
-      "Click Login"
+      "Navigate to the SauceDemo website URL.",
+      "Enter valid username and password in the respective fields.",
+      "Click the 'Login' button.",
+      "Locate the first item on the inventory page and click the 'Add to cart' button for it.",
+      "Click on the 'shopping cart icon' in the header.",
+      "Verify the item is present in the cart. Click the 'Checkout' button.",
+      "Enter a valid first name (e.g., 'John'), last name (e.g., 'Doe'), and postal code (e.g., '12345').",
+      "Click the 'Continue' button.",
+      "Verify the order summary page displays the correct item and shipping information. Click the 'Finish' button."
     ],
-    "expectedResult": "User lands on Inventory page",
-    "priority": "High"
+    "expectedResult": "The 'Checkout Complete' page is displayed, showing a 'Thank you for your order!' message and a unique 'Order Number'.",
+    "priority": "High",
+    "testType": "Positive",
+    "edgeCases": [
+      "Add multiple different items to the cart before proceeding to checkout.",
+      "Add the same item multiple times to the cart before checkout.",
+      "Verify cart contents are retained after navigating away from the cart page and returning.",
+      "Verify cart contents are retained after logging out and logging back in with the same user."
+    ]
   },
   {
-    "title": "Login with problem_user",
+    "title": "Checkout with missing shipping information - Negative Cases",
     "preconditions": [
-      "SauceDemo login page accessible",
-      "Valid creds: problem_user/secret_sauce"
+      "SauceDemo site is accessible",
+      "User can login with valid credentials (e.g., standard_user)",
+      "At least one item is added to the cart."
     ],
     "steps": [
-      "Open login page",
-      "Enter username problem_user",
-      "Enter password secret_sauce",
-      "Click Login"
+      "Navigate to the SauceDemo website URL.",
+      "Enter valid username and password in the respective fields.",
+      "Click the 'Login' button.",
+      "Add a product to the cart.",
+      "Click on the 'shopping cart icon' in the header.",
+      "Click the 'Checkout' button.",
+      "Leave the 'First Name' field blank.",
+      "Click the 'Continue' button."
     ],
-    "expectedResult": "User lands on Inventory page",
-    "priority": "High"
+    "expectedResult": "An error message 'Error: First Name is required' is displayed below the form fields.",
+    "priority": "High",
+    "testType": "Negative",
+    "edgeCases": [
+      "Leave 'Last Name' field blank and attempt to continue.",
+      "Leave 'Postal Code' field blank and attempt to continue.",
+      "Enter only spaces in 'First Name' field and attempt to continue.",
+      "Enter only spaces in 'Last Name' field and attempt to continue.",
+      "Enter only spaces in 'Postal Code' field and attempt to continue.",
+      "Enter invalid characters (e.g., numbers, symbols) in 'First Name' and 'Last Name' fields and attempt to continue.",
+      "Enter non-numeric characters in 'Postal Code' field and attempt to continue."
+    ]
   },
   {
-    "title": "Login with performance_glitch_user",
+    "title": "Cart item persistence after refresh during checkout process",
     "preconditions": [
-      "SauceDemo login page accessible",
-      "Valid creds: performance_glitch_user/secret_sauce"
+      "SauceDemo site is accessible",
+      "Valid user credentials available (e.g., standard_user)"
     ],
     "steps": [
-      "Open login page",
-      "Enter username performance_glitch_user",
-      "Enter password secret_sauce",
-      "Click Login"
+      "Navigate to the SauceDemo website URL.",
+      "Enter valid username and password in the respective fields.",
+      "Click the 'Login' button.",
+      "Add an item to the cart.",
+      "Click on the 'shopping cart icon' in the header.",
+      "Verify the item is present in the cart. Click the 'Checkout' button.",
+      "On the shipping information page, refresh the browser page.",
+      "Verify the item is still present in the cart after refresh. Click the 'Continue' button.",
+      "Enter valid shipping information.",
+      "Click the 'Finish' button."
     ],
-    "expectedResult": "User lands on Inventory page",
-    "priority": "High"
+    "expectedResult": "The item added to the cart is retained after the page refresh. The 'Checkout Complete' page is displayed with a 'Thank you for your order!' message.",
+    "priority": "Medium",
+    "testType": "Edge",
+    "edgeCases": [
+      "Refresh the page on the inventory page after adding an item to the cart.",
+      "Refresh the page on the cart page after adding an item.",
+      "Refresh the page on the order summary page before clicking 'Finish'.",
+      "Test cart persistence after a prolonged period of inactivity (simulating session timeout, if applicable)."
+    ]
   }
 ]
