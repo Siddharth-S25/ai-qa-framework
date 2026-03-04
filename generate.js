@@ -87,5 +87,43 @@ program
       process.exit(1);
     }
   });
+  // ── ANALYZE CODE COMMAND ───────────────────────────────────────────────────
+  program
+    .command('analyze-code')
+    .description('AI analyzes source code to identify testing needs and gaps')
+    .option('-f, --file <path>', 'Path to file to analyze')
+    .option('-d, --dir <path>', 'Path to directory to analyze all JS files')
+    .action(async (options) => {
+      console.log(chalk.cyan('\n╔══════════════════════════════════════════════╗'));
+      console.log(chalk.cyan('║     🔍 AI Code Analysis for Testing          ║'));
+      console.log(chalk.cyan('╚══════════════════════════════════════════════╝\n'));
+
+      if (!options.file && !options.dir) {
+        console.log(chalk.red('❌ Please provide --file or --dir option'));
+        console.log(chalk.yellow('   Example: node generate.js analyze-code --file src/aiClient.js'));
+        process.exit(1);
+      }
+
+      const { analyzeCode } = require('./src/codeAnalyzer');
+
+      if (options.file) {
+        await analyzeCode(options.file);
+      }
+
+      if (options.dir) {
+        const fs = require('fs');
+        const path = require('path');
+        const files = fs.readdirSync(options.dir)
+          .filter(f => f.endsWith('.js'))
+          .map(f => path.join(options.dir, f));
+
+        console.log(chalk.cyan(`Found ${files.length} files to analyze...\n`));
+        for (const file of files) {
+          await analyzeCode(file);
+          console.log(chalk.gray('─'.repeat(60)));
+        }
+      }
+    });
+
 
 program.parse();
