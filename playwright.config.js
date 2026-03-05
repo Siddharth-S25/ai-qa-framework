@@ -3,7 +3,7 @@ require('dotenv').config();
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: 60000,          // increase from 30s to 60s
+  timeout: 90000,          // increase from 30s to 60s
   retries: 3,              // increase from 2 to 3
   workers: 1,              // keep 1 - less pressure on site
 

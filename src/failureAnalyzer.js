@@ -65,56 +65,36 @@ function extractFailures(obj, failures = [], parentTitle = '') {
 
   return failures;
 }
-
-async function analyzePlaywrightResults() {
+// CORRECT — wrap the real functions properly
+async function analyzeFailures() {
+  // read test results and call analyzeFailure for each
   const resultsPath = path.join(process.cwd(), 'test-results', 'results.json');
 
   if (!fs.existsSync(resultsPath)) {
-    console.log(chalk.yellow('\n⚠️  No test results found. Run: npm test first\n'));
+    console.log(chalk.yellow('⚠️  No test results found. Run npm test first.'));
     return;
   }
 
-  console.log(chalk.gray(`\n📄 Reading results from: ${resultsPath}\n`));
-
-  const raw = fs.readFileSync(resultsPath, 'utf-8');
-  const results = JSON.parse(raw);
-
-  // Extract all failures recursively
-  const allFailures = extractFailures(results);
-
-  // Deduplicate by error message
-  const seen = new Set();
-  const failures = allFailures.filter(f => {
-    const key = f.name + f.error;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+  const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+  const failures = results.suites?.flatMap(s =>
+    s.specs?.flatMap(spec =>
+      spec.tests?.filter(t => t.status === 'failed') || []
+    ) || []
+  ) || [];
 
   if (failures.length === 0) {
-    console.log(chalk.green('\n✅ No failures found in results.json\n'));
-    console.log(chalk.gray('Stats from last run:'));
-    console.log(chalk.gray(`  Total: ${results.stats?.expected || 0} expected`));
-    console.log(chalk.gray(`  Passed: ${results.stats?.expected || 0}`));
-    console.log(chalk.gray(`  Failed: ${results.stats?.unexpected || 0}`));
+    console.log(chalk.green('✅ No failures found — all tests passed!'));
     return;
   }
 
-  console.log(chalk.red(`\n🔍 Found ${failures.length} unique failure(s). Analyzing with AI...\n`));
-  console.log(chalk.gray('─'.repeat(60)));
+  console.log(chalk.red(`\n❌ Found ${failures.length} failure(s) to analyze\n`));
 
   for (const failure of failures) {
-    console.log(chalk.red(`\n❌ FAILED: ${failure.name}`));
-    console.log(chalk.gray(`Error: ${failure.error.substring(0, 150)}\n`));
-    console.log(chalk.cyan('🤖 AI Analysis:\n'));
-    try {
-      const analysis = await analyzeFailure(failure.name, failure.error, failure.stack);
-      console.log(chalk.white(analysis));
-    } catch (err) {
-      console.log(chalk.yellow(`Could not analyze: ${err.message}`));
-    }
-    console.log(chalk.gray('\n' + '─'.repeat(60)));
+    const testName  = failure.title || 'Unknown test';
+    const errorMsg  = failure.results?.[0]?.errors?.[0]?.message || 'No error message';
+    const stack     = failure.results?.[0]?.errors?.[0]?.stack   || 'No stack trace';
+    await analyzeFailure(testName, errorMsg, stack);
   }
 }
 
-module.exports = { analyzeFailure, analyzePlaywrightResults };
+module.exports = { analyzeFailures };

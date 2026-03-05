@@ -5,6 +5,7 @@ const BASE_URL = 'https://www.saucedemo.com';
 test.describe('Saucedemo Tests', () => {
 
   test.beforeEach(async ({ page }) => {
+    await page.waitForTimeout(5000);
     await page.goto(BASE_URL);
     await page.locator('#user-name').fill('standard_user');
     await page.locator('#password').fill('secret_sauce');
