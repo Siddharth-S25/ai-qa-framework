@@ -1,87 +1,80 @@
 [
   {
-    "title": "Add items to cart and checkout - positive flow",
+    "title": "Login and add one item to cart",
     "preconditions": [
-      "SauceDemo site is accessible",
-      "Valid user credentials available (e.g., standard_user)"
+      "User has a valid Saucedemo account",
+      "Saucedemo website is accessible and loads correctly"
     ],
     "steps": [
-      "Navigate to the SauceDemo website URL.",
-      "Enter valid username and password in the respective fields.",
-      "Click the 'Login' button.",
-      "Locate the first item on the inventory page and click the 'Add to cart' button for it.",
-      "Click on the 'shopping cart icon' in the header.",
-      "Verify the item is present in the cart. Click the 'Checkout' button.",
-      "Enter a valid first name (e.g., 'John'), last name (e.g., 'Doe'), and postal code (e.g., '12345').",
-      "Click the 'Continue' button.",
-      "Verify the order summary page displays the correct item and shipping information. Click the 'Finish' button."
+      "Navigate to the Saucedemo login page URL.",
+      "Enter the valid username 'standard_user' in the username input field.",
+      "Enter the valid password 'secret_sauce' in the password input field.",
+      "Click on the 'Login' button.",
+      "Locate the first item on the inventory page and click the 'Add to cart' button for that item.",
+      "Click on the shopping cart icon located in the upper right corner of the page."
     ],
-    "expectedResult": "The 'Checkout Complete' page is displayed, showing a 'Thank you for your order!' message and a unique 'Order Number'.",
+    "expectedResult": "The inventory page should be displayed without errors after login. The cart icon should display a badge with the number '1'. The added item should be visible on the cart page with its name, price, and quantity displayed as '1'.",
     "priority": "High",
     "testType": "Positive",
     "edgeCases": [
-      "Add multiple different items to the cart before proceeding to checkout.",
-      "Add the same item multiple times to the cart before checkout.",
-      "Verify cart contents are retained after navigating away from the cart page and returning.",
-      "Verify cart contents are retained after logging out and logging back in with the same user."
+      "Username with leading and trailing spaces (e.g., ' standard_user ').",
+      "Username with case variations (e.g., 'Standard_User', 'STANDARD_USER').",
+      "Password with leading and trailing spaces (e.g., ' secret_sauce ').",
+      "Attempting to add an item to the cart before logging in (should redirect to login).",
+      "Adding an item to the cart and then navigating away from the cart page."
     ]
   },
   {
-    "title": "Checkout with missing shipping information - Negative Cases",
+    "title": "Login with invalid credentials",
     "preconditions": [
-      "SauceDemo site is accessible",
-      "User can login with valid credentials (e.g., standard_user)",
-      "At least one item is added to the cart."
+      "Saucedemo website is accessible and loads correctly"
     ],
     "steps": [
-      "Navigate to the SauceDemo website URL.",
-      "Enter valid username and password in the respective fields.",
-      "Click the 'Login' button.",
-      "Add a product to the cart.",
-      "Click on the 'shopping cart icon' in the header.",
-      "Click the 'Checkout' button.",
-      "Leave the 'First Name' field blank.",
-      "Click the 'Continue' button."
+      "Navigate to the Saucedemo login page URL.",
+      "Enter an invalid username (e.g., 'invalid_user') in the username input field.",
+      "Enter an invalid password (e.g., 'wrong_password') in the password input field.",
+      "Click on the 'Login' button."
     ],
-    "expectedResult": "An error message 'Error: First Name is required' is displayed below the form fields.",
+    "expectedResult": "An error message should be displayed below the login fields, stating 'Epic sadface: Username and password do not match any user in this service'. The user should remain on the login page.",
     "priority": "High",
     "testType": "Negative",
     "edgeCases": [
-      "Leave 'Last Name' field blank and attempt to continue.",
-      "Leave 'Postal Code' field blank and attempt to continue.",
-      "Enter only spaces in 'First Name' field and attempt to continue.",
-      "Enter only spaces in 'Last Name' field and attempt to continue.",
-      "Enter only spaces in 'Postal Code' field and attempt to continue.",
-      "Enter invalid characters (e.g., numbers, symbols) in 'First Name' and 'Last Name' fields and attempt to continue.",
-      "Enter non-numeric characters in 'Postal Code' field and attempt to continue."
+      "Login with a valid username and an invalid password.",
+      "Login with an invalid username and a valid password.",
+      "Login with an empty username and a valid password.",
+      "Login with a valid username and an empty password.",
+      "Login with both empty username and empty password.",
+      "Attempting SQL injection in username and password fields (e.g., ' OR '1'='1').",
+      "Attempting to log in with extremely long username/password strings.",
+      "Attempting to log in with special characters in username and password fields."
     ]
   },
   {
-    "title": "Cart item persistence after refresh during checkout process",
+    "title": "Add multiple items to cart",
     "preconditions": [
-      "SauceDemo site is accessible",
-      "Valid user credentials available (e.g., standard_user)"
+      "User has a valid Saucedemo account",
+      "Saucedemo website is accessible and loads correctly"
     ],
     "steps": [
-      "Navigate to the SauceDemo website URL.",
-      "Enter valid username and password in the respective fields.",
-      "Click the 'Login' button.",
-      "Add an item to the cart.",
-      "Click on the 'shopping cart icon' in the header.",
-      "Verify the item is present in the cart. Click the 'Checkout' button.",
-      "On the shipping information page, refresh the browser page.",
-      "Verify the item is still present in the cart after refresh. Click the 'Continue' button.",
-      "Enter valid shipping information.",
-      "Click the 'Finish' button."
+      "Navigate to the Saucedemo login page URL.",
+      "Login with valid credentials ('standard_user', 'secret_sauce').",
+      "From the inventory page, click the 'Add to cart' button for the first displayed item.",
+      "From the inventory page, click the 'Add to cart' button for the second displayed item.",
+      "Click on the shopping cart icon located in the upper right corner of the page.",
+      "Verify that both added items are present in the cart, along with their correct names, prices, and quantities."
     ],
-    "expectedResult": "The item added to the cart is retained after the page refresh. The 'Checkout Complete' page is displayed with a 'Thank you for your order!' message.",
+    "expectedResult": "The inventory page should load correctly after login. The cart icon should display a badge with the number '2'. The cart page should list both distinct items, each with a quantity of '1' and their respective prices. The total price displayed at the bottom of the cart should be the sum of the prices of these two items.",
     "priority": "Medium",
     "testType": "Edge",
     "edgeCases": [
-      "Refresh the page on the inventory page after adding an item to the cart.",
-      "Refresh the page on the cart page after adding an item.",
-      "Refresh the page on the order summary page before clicking 'Finish'.",
-      "Test cart persistence after a prolonged period of inactivity (simulating session timeout, if applicable)."
+      "Add the same item to the cart twice.",
+      "Add one item, navigate away, add another item, and then check the cart.",
+      "Add multiple items and then remove one item from the cart.",
+      "Add items to the cart, log out, and then log back in to verify if cart items persist.",
+      "Add items to the cart with simulated slow network responses for each 'Add to cart' action.",
+      "Add items to the cart and then immediately proceed to checkout to see if all items are included.",
+      "Add items to cart, clear browser cache/cookies, and then check cart.",
+      "Add items to cart, then try to add an item that is out of stock (if applicable)."
     ]
   }
 ]
