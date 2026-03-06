@@ -1,277 +1,320 @@
 # 🤖 AI QA Framework
 
-> **User Story → Test Cases → Playwright Scripts → CI Pipeline**  
-> Built with Node.js | Playwright | OpenRouter AI (Free) | GitHub Actions
+![CI](https://github.com/Siddharth-S25/ai-qa-framework/actions/workflows/ai-qa.yml/badge.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
+![Playwright](https://img.shields.io/badge/playwright-1.x-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![AI](https://img.shields.io/badge/AI-OpenRouter%20%2B%20Ollama-purple)
 
-[![CI](https://github.com/Siddharth-S25/ai-qa-framework/actions/workflows/ai-qa.yml/badge.svg)](https://github.com/Siddharth-S25/ai-qa-framework/actions/workflows/ai-qa.yml)
-![Node.js](https://img.shields.io/badge/Node.js-20-green?logo=node.js)
-![Playwright](https://img.shields.io/badge/Playwright-1.40-blue?logo=playwright)
-![OpenRouter](https://img.shields.io/badge/AI-OpenRouter-orange)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+> **Plain English User Story → AI-Generated Test Cases → Running Playwright Tests → CI/CD Pipeline**
+>
+> Built to demonstrate production-grade AI-assisted QA automation skills.
 
 ---
 
 ## 🎯 What This Does
 
-Traditional QA requires writing tests manually. This framework uses **AI to automate the entire process** from a plain English user story to a running Playwright test in one command.
+```
+You type:    "As a user I should login and add items to cart"
+                              ↓
+Framework:   Generates structured test cases (few-shot AI)
+                              ↓
+             Reviews and improves them (AI feedback loop)
+                              ↓
+             Writes complete Playwright scripts (context-aware AI)
+                              ↓
+             Runs tests against real website
+                              ↓
+             Analyzes any failures with AI root cause analysis
+```
 
-```
-You write:   "As a user, I should login using valid email and password"
-                              ↓  AI (Step 1)
-             Structured JSON test cases with steps and assertions
-                              ↓  AI (Step 2)
-             Ready-to-run Playwright .spec.js test script
-                              ↓  Playwright
-             Tests execute with retry, screenshots, video
-                              ↓  AI (Step 3)
-             Failure analysis: root cause + suggested fix
-                              ↓  GitHub Actions
-             Full pipeline runs automatically on every push
-```
+**Zero manual test code written. One command does everything.**
 
 ---
 
-## ⚡ Quick Start
+## ✨ Features
 
+| Feature | Description | JD Requirement Covered |
+|---|---|---|
+| 🧠 AI Test Generation | User story → structured test cases via few-shot prompting | AI-assisted test case generation |
+| 🔄 Feedback Loop | Second AI call reviews output as senior QA lead | Maximize AI model effectiveness |
+| 🎯 Context-Setting | Real HTML selectors + URL structure in prompt | Prompt engineering techniques |
+| 🔍 Code Analysis | AI reads source files, finds testing gaps | Analyze codebases for testing needs |
+| 🏠 On-Premise AI | Ollama + Phi3 running locally — zero internet | On-premise AI model deployment |
+| ⚡ Auto-Fallback | Local AI fails → auto-switches to cloud AI | Production reliability patterns |
+| 🎭 Playwright Tests | AI-generated specs running against real site | Playwright automation framework |
+| 🚀 CI/CD Pipeline | GitHub Actions on every push | CI/CD integration |
+| 📊 Failure Analysis | AI explains why tests failed with fixes | AI-assisted debugging |
+| 📄 HTML Reports | Auto-generated and uploaded as CI artifact | Professional test reporting |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
 ```bash
-# 1. Clone and install
-git clone https://github.com/Siddharth-S25/ai-qa-framework.git
+node --version   # >= 18
+npm --version    # >= 8
+```
+
+### Installation
+```bash
+git clone https://github.com/Siddharth-S25/ai-qa-framework
 cd ai-qa-framework
 npm install
 npx playwright install chromium
+```
 
-# 2. Add your free API key (get one at openrouter.ai - no credit card needed)
+### Configuration
+```bash
 cp .env.example .env
-# Edit .env and paste your key
+# Add your OpenRouter API key to .env
+# Get free key at: https://openrouter.ai
+```
 
-# 3. Run the full AI pipeline
-node generate.js full --story "As a user, I should login using valid email and password"
-
-# 4. Run tests
+### Run Full Pipeline
+```bash
+node generate.js full -s "As a user I should login and add items to cart on saucedemo"
 npm test
-
-# 5. Analyze any failures with AI
-node generate.js analyze
-```
-
----
-
-## 🔥 Features
-
-### Feature 1 — AI Test Case Generator
-
-**Input:** Plain English user story  
-**Output:** `tests/test-cases.json`
-
-```json
-[
-  {
-    "title": "Login with valid credentials",
-    "preconditions": ["User is registered", "App is accessible"],
-    "steps": [
-      "Navigate to login page",
-      "Enter valid username",
-      "Enter valid password",
-      "Click the Login button"
-    ],
-    "expectedResult": "User is redirected to inventory page",
-    "priority": "High"
-  }
-]
-```
-
----
-
-### Feature 2 — AI Playwright Script Generator
-
-**Input:** `tests/test-cases.json`  
-**Output:** `tests/generated/generated.spec.js`
-
-```javascript
-const { test, expect } = require('@playwright/test');
-
-test.describe('Login Functionality', () => {
-  test('Login with valid credentials', async ({ page }) => {
-    await page.goto(process.env.BASE_URL);
-    await page.locator('#user-name').fill('standard_user');
-    await page.locator('#password').fill('secret_sauce');
-    await page.locator('#login-button').click();
-    await expect(page).toHaveURL(/inventory/);
-    await expect(page.locator('.inventory_list')).toBeVisible();
-  });
-});
-```
-
----
-
-### Feature 3 — Test Execution + Reporting
-
-```bash
-npm test          # Run all tests
-npm run report    # Open HTML report in browser
-```
-
-- 🔁 Auto-retry on failure (2 retries)
-- 📸 Screenshot captured on every failure
-- 🎥 Video recorded on every failure
-- 📊 HTML report with full visual details
-- 📄 JSON results for AI analysis
-
----
-
-### Feature 4 — AI Failure Analyzer ⭐ The Wow Factor
-
-```bash
-node generate.js analyze
-```
-
-```
-❌ FAILED: Login Functionality > Login with valid credentials
-Error: Test timeout of 30000ms exceeded
-
-🤖 AI Analysis:
-
-1. ROOT CAUSE
-   getByLabel('Username') found no matching element.
-   Saucedemo uses id="user-name", not a label tag.
-
-2. LIKELY REASON
-   AI generated selectors without inspecting actual HTML.
-
-3. SUGGESTED FIX
-   Replace:  await page.getByLabel('Username')
-   With:     await page.locator('#user-name')
-
-4. PREVENTION TIP
-   Always inspect HTML before writing selectors.
-   Use data-testid attributes for stable selectors.
 ```
 
 ---
 
 ## 📋 All Commands
 
-| Command | Description |
-|---------|-------------|
-| `node generate.js full -s "story"` | Full pipeline in one shot |
-| `node generate.js cases -s "story"` | Generate JSON test cases only |
-| `node generate.js scripts` | Generate Playwright script from test-cases.json |
-| `node generate.js analyze` | AI analysis of test failures |
-| `npm test` | Run all Playwright tests |
-| `npm run report` | Open HTML report in browser |
-| `npx playwright test --headed` | Run with visible browser |
+```bash
+# Full AI pipeline — user story to running tests
+node generate.js full -s "your user story here"
+
+# Generate test cases only (with few-shot + feedback loop)
+node generate.js cases -s "your user story here"
+
+# Generate Playwright scripts from existing test cases
+node generate.js scripts
+
+# AI analysis of test failures
+node generate.js analyze
+
+# AI code analysis — find testing gaps in any file
+node generate.js analyze-code --file src/aiClient.js
+
+# Check on-premise AI status
+node generate.js ollama-status
+
+# Run with local AI instead of cloud
+node generate.js full -s "user story" --local
+
+# Run tests
+npm test
+```
 
 ---
 
-## 🏗 Architecture
+## 🧠 Prompt Engineering Techniques
+
+### 1. Few-Shot Prompting
+```javascript
+// System prompt includes a PERFECT example before asking AI to generate
+// Result: identical JSON structure every single run
+SYSTEM_PROMPT = `
+Here is a perfect example of what I want:
+{
+  "title": "Login with valid credentials",
+  "testType": "Positive",
+  "priority": "High",
+  "edgeCases": ["Empty username", "Special characters"]
+}
+Now generate in exactly this format...
+`
+```
+
+### 2. Feedback Loop (Two-Call Pipeline)
+```javascript
+// Call 1: Generate test cases
+const draft = await callAI(SYSTEM_PROMPT, userStory);
+
+// Call 2: Senior QA lead reviews and improves
+const final = await callAI(REVIEW_PROMPT, draft);
+// Catches: missing negatives, vague assertions, duplicate tests
+```
+
+### 3. Context-Setting
+```javascript
+// Real application data injected into every prompt
+const context = `
+REAL SELECTORS: #user-name, #password, #login-button
+REAL URLS: /inventory.html, /cart.html, /checkout-step-one.html
+REAL ERRORS: "Epic sadface: Username and password do not match"
+RULE: Never use getByLabel() — always use locator('#id')
+`;
+```
+
+---
+
+## 🏠 On-Premise AI Architecture
+
+```
+Cloud Mode (default):              Local Mode (--local flag):
+┌─────────────────────┐            ┌─────────────────────┐
+│   generate.js       │            │   generate.js       │
+│        ↓            │            │        ↓            │
+│   callCloudAI()     │            │   callLocalAI()     │
+│        ↓            │            │        ↓            │
+│  openrouter.ai API  │            │  localhost:11434    │
+│        ↓            │            │  (Ollama + Phi3)    │
+│   AI Model Cloud    │            │   AI Model Local    │
+│  (needs internet)   │            │  (zero internet)    │
+└─────────────────────┘            └─────────────────────┘
+                    Auto-Fallback: local fails → cloud takes over
+```
+
+### Setup Local AI
+```bash
+# Install Ollama from https://ollama.com
+ollama pull phi3
+node generate.js ollama-status
+node generate.js analyze-code --file src/aiClient.js --local
+```
+
+---
+
+## 🐛 AI Errors Found and Fixed
+
+Real errors discovered during development — each one is a lesson in AI limitations:
+
+| Error | AI Mistake | Root Cause | Fix Applied |
+|---|---|---|---|
+| `getByLabel` timeout | Used label selector on site with no labels | AI assumes HTML best practices | Added real selectors to context |
+| `beforeEach` undefined | Forgot `test.` prefix — Jest vs Playwright | Framework confusion | Specified exact syntax in prompt |
+| `checkout-step-3` URL | Invented URL that does not exist | AI hallucination | Added complete URL map to prompt |
+| Wrong error text | Added "Error: " prefix that site doesn't show | AI invented text | Added exact messages to context |
+| Missing `waitForTimeout` | Lost on script regeneration | Fixed output not prompt | Made mandatory rule in prompt |
+
+> **Key Learning:** AI never says "I don't know" — it invents confidently. Always validate AI output against the real application.
+
+---
+
+## 📁 Project Structure
 
 ```
 ai-qa-framework/
-│
-├── generate.js                 ← Main CLI entry point
-├── playwright.config.js        ← Playwright configuration
-├── package.json                ← Dependencies and npm scripts
-├── .env                        ← Your secrets (never committed)
-├── .env.example                ← Template for new developers
-│
 ├── src/
-│   ├── aiClient.js             ← OpenRouter API communication
-│   ├── testCaseGenerator.js    ← User story → JSON test cases
-│   ├── scriptGenerator.js      ← JSON → Playwright spec file
-│   └── failureAnalyzer.js      ← AI-powered failure analysis
-│
+│   ├── aiClient.js          # Dual-mode: cloud (OpenRouter) + local (Ollama)
+│   ├── testCaseGenerator.js # Few-shot prompting + feedback loop
+│   ├── scriptGenerator.js   # Context-aware Playwright generation
+│   ├── codeAnalyzer.js      # AI testing gap analysis
+│   └── failureAnalyzer.js   # AI root cause analysis
 ├── tests/
-│   ├── test-cases.json         ← AI-generated test cases
-│   └── generated/
-│       └── generated.spec.js   ← AI-generated Playwright tests
-│
-└── .github/
-    └── workflows/
-        └── ai-qa.yml           ← GitHub Actions CI pipeline
+│   ├── generated/           # AI-generated Playwright specs
+│   └── test-cases.json      # Structured test cases from AI
+├── pages/                   # Page Object Model classes
+│   ├── LoginPage.js
+│   ├── InventoryPage.js
+│   ├── CartPage.js
+│   └── CheckoutPage.js
+├── .github/
+│   └── workflows/
+│       └── ai-qa.yml        # CI/CD pipeline
+├── generate.js              # CLI entry point — 6 commands
+├── playwright.config.js     # Playwright configuration
+├── .env.example             # Environment template
+└── package.json
 ```
 
 ---
 
-## 🚀 GitHub Actions CI Pipeline
+## 🔄 CI/CD Pipeline
 
-Every push to `main` automatically runs:
+Every push to `main` triggers:
 
-```
-✅ Checkout code
-✅ Setup Node.js 20
-✅ Install dependencies (npm ci)
-✅ Install Playwright Chromium
-✅ Run Playwright tests
-✅ AI Failure Analysis
-✅ Upload HTML Report as artifact
+```yaml
+1. Install Node.js 20 and dependencies
+2. Install Playwright Chromium browser
+3. Run full Playwright test suite
+4. Run AI failure analysis on results
+5. Upload HTML report as downloadable artifact
 ```
 
-### Setup
+Secrets managed via GitHub Secrets — API key never in code.
 
-1. Go to your repo → **Settings → Secrets and variables → Actions**
-2. Add these secrets:
+---
 
-| Secret Name | Value |
-|-------------|-------|
-| `OPENROUTER_API_KEY` | Your OpenRouter API key |
-| `BASE_URL` | Your app URL |
+## 🧪 Test Results
 
-### Manual Trigger with User Story
+```
+Running 3 tests using 1 worker
 
-1. Go to **Actions** tab → **AI QA Framework - CI**
-2. Click **Run workflow**
-3. Type your user story
-4. Watch GitHub generate and run tests automatically!
+  ✓ Saucedemo Tests › Login and add one item to cart
+  ✓ Saucedemo Tests › Login with invalid credentials
+  ✓ Saucedemo Tests › Add multiple items to cart
+
+  3 passed (1.3m)
+```
 
 ---
 
 ## 🛠 Tech Stack
 
-| Tool | Purpose |
-|------|---------|
-| **Node.js 20** | JavaScript runtime |
-| **Playwright** | Browser automation and test execution |
-| **OpenRouter** | Free AI API (Mistral, LLaMA, Gemma models) |
-| **Commander.js** | CLI argument parsing |
-| **Chalk** | Colored terminal output |
-| **dotenv** | Environment variable management |
-| **Axios** | HTTP client for OpenRouter API calls |
-| **GitHub Actions** | CI/CD pipeline automation |
+| Technology | Version | Purpose |
+|---|---|---|
+| Node.js | >= 18 | Runtime |
+| Playwright | 1.x | Browser automation |
+| OpenRouter API | - | Cloud AI (multiple models) |
+| Ollama | 0.17.x | On-premise AI server |
+| Microsoft Phi3 | 3.8B params | Local AI model |
+| Commander.js | - | CLI framework |
+| Chalk | - | Terminal formatting |
+| Axios | - | HTTP client for AI APIs |
+| GitHub Actions | - | CI/CD pipeline |
+| dotenv | - | Environment management |
 
 ---
 
-## 🔐 Security
+## 🎯 JD Requirements Covered
 
-| Environment | How Secrets Are Stored |
-|-------------|----------------------|
-| Local development | `.env` file listed in `.gitignore` — never committed |
-| GitHub Actions CI | GitHub Secrets — encrypted, never shown in logs |
-| Source code | Zero hardcoded credentials anywhere |
+This project was built to match real AI QA job requirements:
 
----
-
-## 🧪 Test Site
-
-Tested against **[Saucedemo](https://www.saucedemo.com)** — a free practice automation site.
-
-| Username | Password | Result |
-|----------|----------|--------|
-| `standard_user` | `secret_sauce` | ✅ Login succeeds |
-| `locked_out_user` | `secret_sauce` | ❌ Shows locked error |
-| `problem_user` | `secret_sauce` | ⚠️ UI has intentional bugs |
+- ✅ AI-assisted test case generation and script writing
+- ✅ Advanced prompt engineering (few-shot, feedback loops, context-setting)
+- ✅ Review, validate and refine AI-generated scripts
+- ✅ Analyze codebases to identify testing needs and coverage gaps
+- ✅ Set up and manage on-premise AI model deployment (Ollama + Phi3)
+- ✅ Playwright automation framework with CI/CD
+- ✅ GitHub Copilot integration during development
+- ✅ Page Object Model architecture
 
 ---
 
-## 💡 What Makes This Stand Out
+## 📖 What I Learned
 
-- **Full AI pipeline** — not just execution but generation and diagnosis
-- **Real CI/CD** — runs in GitHub Actions on every push
-- **Security-aware** — proper secret management from day one
-- **Debuggable** — screenshots, video, and AI explanation on every failure
-- **Extensible** — easy to add Page Object Model or API testing
+**About AI in QA:**
+- AI generates code based on training patterns — not your specific application
+- Context-setting (real HTML/URLs in prompt) eliminates 80% of AI errors
+- Few-shot prompting makes output consistent — zero-shot output varies every run
+- AI hallucination is real and confident — always validate against real app
+- Fix the prompt, never the generated output — manual fixes are lost on regeneration
+
+**About On-Premise AI:**
+- Hardware matters — Phi3 needs 3.5GB free RAM minimum
+- On-premise = zero data leaves machine = required for enterprise/banking/healthcare
+- Same framework code works for cloud or local — architecture is model-agnostic
+
+---
 
 ---
 
 ## 📄 License
 
-MIT — free to use.
+MIT — free to use, fork, and learn from.
+
+---
+
+## 👤 Author
+
+Built by a QA Automation Engineer focused on AI-assisted testing.
+
+- GitHub: https://github.com/Siddharth-S25
+
+---
+
+*Every error found and fixed. Every technique documented. All tests green.*
